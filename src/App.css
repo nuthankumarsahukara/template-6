@@ -1,0 +1,83 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: black;
+    color: white;
+}
+
+.nav-links{
+    display: flex;
+    gap:10px;
+}
+
+.btn-1,.btn-2{
+    padding: 8px 35px;
+    cursor: pointer;
+    border: 2px solid white;
+    color: white;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    gap:20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+.card{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px 30px;
+    width:380px;
+}
+
+.card-body{
+    display: flex;
+    align-items: center;
+}
+
+.card .btn-2{
+    color:white;
+    width: 100%;
+    background-color: red;
+}
+
+.text-box{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius:5px;
+    margin-bottom: 20px;;
+}
+
+.form{
+    width: 400px;
+    padding: 30px;
+    border: 1px solid black;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    margin: 20px auto;
+}
+
+.searchbar{
+    text-align: center;
+    padding:45px;
+}
+
+.searchbar input,.searchbar select{
+    padding: 5px 15px;
+    border-radius: 8px;
+    border: 1px solid black;
+    font-size: 25px;
+    outline: none;
+}

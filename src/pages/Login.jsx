@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../context/UserProvider';
 
 export default function Login() {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let navigate = useNavigate();
+  let { loginUser } = useContext(UserContext);
+
   let handleSubmit = async (e) => {
     e.preventDefault();
     await axios.post("https://api-bdti.onrender.com/login", { email, password })
@@ -13,7 +16,7 @@ export default function Login() {
         console.log(res)
         if (res.status === 200) {
           alert(res.data.message)
-          localStorage.setItem("token", res.data.patient.email)
+          loginUser(res.data.patient.email)
           navigate("/")
         } else if (res.status === 400) {
           alert(res.data.message)

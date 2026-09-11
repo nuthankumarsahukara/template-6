@@ -1,8 +1,11 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../context/UserProvider";
 
 export default function Doctorcard(props) {
     let navigator = useNavigate();
-    let token = localStorage.getItem("token");
+    //let token = localStorage.getItem("token");
+    let { user } = useContext(UserContext)
     return (
         <div className='card'>
             <div className='card-body'>
@@ -16,7 +19,7 @@ export default function Doctorcard(props) {
                 </div>
             </div>
             {
-                token ? (
+                user ? (
                     <>
                         <button className="btn-2" style={{ backgroundColor: "blue" }} onClick={() => navigator(`/doctor/${props.id}`)}>Update</button>
                         <button className='btn-2' onClick={() => props.handleDelete(props.id)}>Delete</button>

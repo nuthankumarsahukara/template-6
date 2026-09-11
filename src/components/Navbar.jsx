@@ -1,11 +1,14 @@
-import React from 'react'
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../context/UserProvider';
 
 export default function Navbar() {
     let navigation = useNavigate();
-    let token = localStorage.getItem("token")
+    //let token = localStorage.getItem("token")
+    let { user, logoutUser } = useContext(UserContext);
     function logout() {
-        localStorage.removeItem("token")
+        //localStorage.removeItem("token")
+        logoutUser();
         navigation("/")
     }
     return (
@@ -14,7 +17,7 @@ export default function Navbar() {
             <div className='nav-links'>
                 <button className='btn-1' onClick={() => navigation("/")}>Home</button>
                 {
-                    token ? (
+                    user ? (
                         <>
                             <button className='btn-2' onClick={() => navigation("/addDoctor")}>Add Doctor</button>
                             <button className='btn-2' onClick={() => navigation("/patient")}>Patient</button>

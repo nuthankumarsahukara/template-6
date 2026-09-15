@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function Register() {
     let [doctor, setDoctor] = useState([]);
@@ -23,10 +24,25 @@ export default function Register() {
     async function handleSubmit(e) {
         e.preventDefault()
         console.log(data)
-        await axios.post("https://api-bdti.onrender.com/patients", data)
-            .then(res => console.log(res.data))
-        alert('Patient Added Successfully....')
-        navigate("/login")
+        let result = await Swal.fire({
+            icon: "question",
+            title: "Are You Want ?",
+            text: "Do you want to register the Patient ?",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel"
+        })
+        if (result.isConfirmed) {
+            let res = await axios.post("https://api-bdti.onrender.com/patients", data)
+            console.log(res.data)
+            await Swal.fire({
+                icon: "success",
+                title: "Patient Register Successfully.",
+                timer: 1500,
+                showConfirmButton: false
+            })
+            navigate("/login")
+        }
     }
     useEffect(() => {
         async function getDetails() {

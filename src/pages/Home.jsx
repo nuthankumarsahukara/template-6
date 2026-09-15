@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Doctorcard from '../components/Doctorcard';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function Home() {
     let [search, setSearch] = useState("");
@@ -29,8 +30,25 @@ export default function Home() {
 
     async function handleDelete(id) {
         try {
-            await axios.delete(`https://api-bdti.onrender.com/doctors/${id}`);
-            getDetails()
+            const result = await Swal.fire({
+                icon: "warning",
+                title: "Are You Sure ?",
+                text: "Do you want to delete Doctor ?",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel"
+            })
+            if (result.isConfirmed) {
+                await axios.delete(`https://api-bdti.onrender.com/doctors/${id}`);
+                await getDetails()
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: "Doctor Deleted Successfully.",
+                    timer: 1500,
+                    showConfirmButton: false
+                })
+            }
         } catch (error) {
             console.log("Error deleting doctor :", error);
         }

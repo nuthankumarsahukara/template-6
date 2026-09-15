@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/UserProvider';
+import Swal from 'sweetalert2';
 
 export default function Navbar() {
     let navigation = useNavigate();
@@ -8,8 +9,27 @@ export default function Navbar() {
     let { user, logoutUser } = useContext(UserContext);
     function logout() {
         //localStorage.removeItem("token")
-        logoutUser();
-        navigation("/")
+        Swal.fire({
+            icon: "warning",
+            title: "Are you Sure ?",
+            text: "You want to logout from your account ?",
+            showCancelButton: true,
+            confirmButtonText: "Yes,Logout",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logoutUser();
+                navigation("/")
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Logged Out",
+                    text: "You have been Logged out Successfully.",
+                    timer: 1500,
+                    showConfirmButton: false
+                })
+            }
+        })
     }
     return (
         <div className='navbar'>

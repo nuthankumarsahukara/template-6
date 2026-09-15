@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import axios from 'axios'
 import { useEffect, useState } from "react"
+import Swal from "sweetalert2";
 
 function DoctorDetails() {
     const { id } = useParams()
@@ -12,7 +13,7 @@ function DoctorDetails() {
     let [salary, setSalary] = useState("");
 
     let fectchData = async () => {
-        let res = await axios.get(`https://doctor-api-egaa.onrender.com/doctors/${id}`)
+        let res = await axios.get(`https://api-bdti.onrender.com/doctors/${id}`)
         let data = res.data
         setName(data.name ?? "");
         setAge(data.age ?? "");
@@ -27,9 +28,24 @@ function DoctorDetails() {
     let handleUpdate = async (e) => {
         e.preventDefault();
         let updateData = { name, age, gender, specialization, salary }
-        await axios.put(`https://doctor-api-egaa.onrender.com/doctors/${id}`, updateData)
-        alert('Update Doctor Details Successfully.....')
-        navigator("/")
+        const result = await Swal.fire({
+            icon: "question",
+            title: "Do you Want ?",
+            text: "Are you want to Update doctor ?",
+            showCancelButton: true,
+            confrimButtonText: "Yes",
+            cancelButtonText: "Cancel"
+        })
+        if (result.isConfirmed) {
+            await axios.put(`https://api-bdti.onrender.com/doctors/${id}`, updateData)
+            Swal.fire({
+                icon: "success",
+                title: "Updated!",
+                text: "Doctor Updated Successfully.",
+                timer: 1500
+            })
+            navigator("/")
+        }
     }
 
     return (

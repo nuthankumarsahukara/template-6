@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import { UserContext } from '../context/UserProvider';
 
 export default function Login() {
+
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let navigate = useNavigate();
@@ -11,23 +13,43 @@ export default function Login() {
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("https://api-bdti.onrender.com/login", { email, password })
-      .then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          alert(res.data.message)
-          loginUser(res.data.patient.email)
-          navigate("/")
-        } else if (res.status === 400) {
-          alert(res.data.message)
-        } else if (res.status === 401) {
-          alert(res.data.message)
-        }
-      })
-      .catch(err => {
-        console.log(err?.response.data.message)
-      })
+    try {
+      let res = await axios.post(
+        "https://api-bdti.onrender.com/login",
+        { email, password }
+      );
+      console.log(res);
+      if (res.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: res.data.message,
+          confirmButtonText: "OK"
+        }).then(() => {
+          loginUser(res.data.patient.email);
+          navigate("/");
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: err.response.data.message,
+          confirmButtonText: "OK"
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Something went wrong",
+          text: "Unable to connect to the server",
+          confirmButtonText: "OK"
+        });
+      }
+    }
   }
+
   let form = {
     padding: "80px 30px",
     border: "1px solid black",
@@ -37,12 +59,14 @@ export default function Login() {
     width: "450px",
     backgroundColor: "rgba(0,0,0,0.1)"
   }
+
   let container = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "90vh"
   }
+
   let input = {
     padding: "10px 5px",
     width: "100%",
@@ -51,6 +75,7 @@ export default function Login() {
     border: "2px solid black",
     margin: "8px 2px"
   }
+
   let btn = {
     width: "100%",
     padding: "10px 5px",
@@ -59,13 +84,32 @@ export default function Login() {
     backgroundColor: "black",
     color: "white"
   }
+
   return (
     <div style={container}>
-      <form style={form}>
+      <form style={form} onSubmit={handleSubmit}>
         <h1 align="center">Login Page</h1>
-        <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter Your Email' style={input} /> <br />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter Your Password' style={input} /><br />
-        <button style={btn} onClick={handleSubmit}>Login</button>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter Your Email"
+          style={input}
+          autoComplete="email"
+        />
+        <br />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter Your Password"
+          style={input}
+          autoComplete="current-password"
+        />
+        <br />
+        <button type="submit" style={btn}>
+          Login
+        </button>
       </form>
     </div>
   )
